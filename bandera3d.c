@@ -4,6 +4,7 @@
 #include<GL/gl.h>
 #include<GL/glut.h>
 #include <math.h>
+#define PI 3.14159265
 
 float radio = 2, calx, caly;
 float angleX = 0.0f; // Ángulo de rotación en el eje X
@@ -11,59 +12,57 @@ float angleY = 0.0f; // Ángulo de rotación en el eje Y
 float angleZ = 0.0f; // Ángulo de rotación en el eje Z
 
 
-#define PI 3.14159265
-
-void Cilindro(float height, float radius, int sides) {
+void Cilindro(float altura, float radio, int Cveces) {
     glColor3f(252, 227, 0);
     int i;
-    float angle = 2 * PI / sides;
+    float angle = 2 * PI / Cveces;
 
     glBegin(GL_TRIANGLE_STRIP);
-    for (i = 0; i <= sides; i++) {
-        float x = radius * cos(i * angle) - 1.34f;
-        float z = radius * sin(i * angle) - 0.2;
+    for (i = 0; i <= Cveces; i++) {
+        float x = radio * cos(i * angle) - 1.34f;
+        float z = radio * sin(i * angle) - 0.2;
 
-        glVertex3f(x, height, z);
+        glVertex3f(x, altura, z);
         glVertex3f(x, -2.5, z);
     }
     glEnd();
 
     glBegin(GL_TRIANGLE_FAN);
-    glVertex3f(-1.335f, height, -0.2);
-    for (i = 0; i <= sides; i++) {
-        float x = radius * cos(i * angle) - 1.34f;
-        float z = radius * sin(i * angle) - 0.2;
+    
+    for (i = 0; i <= Cveces; i++) {
+        float x = radio * cos(i * angle) - 1.34f;
+        float z = radio * sin(i * angle) - 0.2;
 
-        glVertex3f(x, height, z);
+        glVertex3f(x, altura, z);
     }
     glEnd();
 
     glBegin(GL_TRIANGLE_FAN);
-    glVertex3f(-1.320, -1.0, -0.2);
-    for (i = sides; i >= 0; i--) {
-        float x = radius * cos(i * angle) - 1.335f;
-        float z = radius * sin(i * angle) - 0.2;
+    
+    for (i = Cveces; i >= 0; i--) {
+        float x = radio * cos(i * angle) - 1.34f;
+        float z = radio * sin(i * angle) - 0.2;
 
         glVertex3f(x, -2.5, z);
     }
     glEnd();
 }
 
-void Circulo(float radius, int slices, int stacks) {
+void Circulo(float radio, int porciones, int pilas) {
     int i, j;
     glColor3f(252, 227, 0);
-    for (i = 0; i < slices; i++) {
-        float lat0 = PI * (-0.5 + (float) (i - 1) / slices);
-        float z0 = radius * sin(lat0);
-        float zr0 = radius * cos(lat0);
+    for (i = 0; i < porciones; i++) {
+        float lat0 = PI * (-0.5 + (float) (i + 1) / porciones);
+        float z0 = radio * sin(lat0);
+        float zr0 = radio * cos(lat0);
 
-        float lat1 = PI * (-0.5 + (float) i / slices);
-        float z1 = radius * sin(lat1);
-        float zr1 = radius * cos(lat1);
+        float lat1 = PI * (-0.5 + (float) i / porciones);
+        float z1 = radio * sin(lat1);
+        float zr1 = radio * cos(lat1);
 
         glBegin(GL_QUAD_STRIP);
-        for (j = 0; j <= stacks; j++) {
-            float lng = 2 * PI * (float) (j - 1) / stacks;
+        for (j = 0; j <= pilas; j++) {
+            float lng = 2 * PI * (float) (j - 1) / pilas;
             float x = cos(lng);
             float y = sin(lng);
 
@@ -220,12 +219,10 @@ void contenidoEs() {
     glVertex3f(0.5f, -0.2f, -0.08f);
     //alto
     glVertex3f(0.35f, 0.1f, -0.08f);
-
     glEnd();
 
     //mar
     glColor3f(0, 0, 255);
-
     glBegin(GL_POLYGON); //dibujaremos lineas
 
     glVertex3f(0.215f, -0.19f, -0.076f); //abajo
@@ -311,7 +308,37 @@ void contenidoEs() {
     //alto
     glVertex3f(0.350f, 0.01f, -0.074f);
     glEnd();
-
+    
+    glBegin(GL_LINES);
+    glColor3f(1.0 , 0.0, 0.0);
+    glVertex3f(0.34f, 0.058f, -0.074f);
+    glVertex3f(0.36f, 0.058f, -0.074f);
+    glEnd();
+    
+    glBegin(GL_LINES);
+    glColor3f(255.0 , 102.0, 0.0);
+    glVertex3f(0.337f, 0.056f, -0.074f);
+    glVertex3f(0.363f, 0.056f, -0.074f);
+    glEnd();
+    
+      glBegin(GL_LINES);
+    glColor3f(255, 255, 0.0);
+    glVertex3f(0.335f, 0.054f, -0.074f);
+    glVertex3f(0.366f, 0.054f, -0.074f);
+    glEnd();
+    
+     glBegin(GL_LINES);
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex3f(0.334f, 0.052f, -0.074f);
+    glVertex3f(0.367f, 0.052f, -0.074f);
+    glEnd();
+    
+     glBegin(GL_LINES);
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex3f(0.333f, 0.05f, -0.074f);
+    glVertex3f(0.368f, 0.05f, -0.074f);
+    glEnd();
+    
     //resplandor
     glBegin(GL_POINTS);
     glColor3f(0, 0, 0);
@@ -443,9 +470,9 @@ void banderas() {
 
     glVertex3f(0.525f, -0.035f, -0.073f); //arriba al final
 
-    glVertex3f(0.50f, -0.110f, -0.073f);
+    glVertex3f(0.51f, -0.120f, -0.073f);
 
-    glVertex3f(0.475f, -0.150f, -0.073f); //arriba al final
+    glVertex3f(0.484f, -0.17f, -0.073f); //arriba al final
 
     glVertex3f(0.46f, -0.12f, -0.073f); //arriba inicio
 
@@ -599,6 +626,67 @@ void banderas() {
     glVertex3f(0.35f, 0.18f, -0.08f);
 
     glEnd();
+    
+    
+    //bandera izquierda abajo
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.34f, -0.20f, -0.075f);
+    glVertex3f(0.31f, -0.225f, -0.075f);    
+     glVertex3f(0.25f, -0.225f, -0.075f);
+     glVertex3f(0.21f, -0.20f, -0.075f);
+    glEnd();
+    
+    //bandera derecha abajo
+    glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.36f, -0.20f, -0.075f);
+    glVertex3f(0.39f, -0.225f, -0.075f);    
+     glVertex3f(0.45f, -0.225f, -0.075f);
+     glVertex3f(0.49f, -0.20f, -0.075f);
+    glEnd();
+
+    
+       
+    //bandera izquierda abajo
+     glColor3f(1, 1, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.31f, -0.20f, -0.074f);
+    glVertex3f(0.29f, -0.21f, -0.074f);    
+     glVertex3f(0.27f, -0.21f, -0.074f);
+     glVertex3f(0.25f, -0.20f, -0.074f);
+    glEnd();
+    
+    //bandera izquierda abajo
+     glColor3f(1, 1, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.39f, -0.20f, -0.074f);
+    glVertex3f(0.41f, -0.21f, -0.074f);    
+     glVertex3f(0.45f, -0.21f, -0.074f);
+     glVertex3f(0.47f, -0.20f, -0.074f);
+    glEnd();
+    
+    
+    //cosa de enmedio
+    //bandera izquierda abajo
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.34f, -0.20f, -0.074f);
+    glVertex3f(0.31f, -0.24f, -0.074f); 
+    glVertex3f(0.35f, -0.26f, -0.074f);
+     glVertex3f(0.39f, -0.24f, -0.074f);
+     glVertex3f(0.36f, -0.20f, -0.074f);
+    glEnd();
+    
+     glColor3f(1, 1, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.345f, -0.20f, -0.073f);
+    glVertex3f(0.33f, -0.24f, -0.073f); 
+    glVertex3f(0.35f, -0.25f, -0.073f);
+     glVertex3f(0.37f, -0.24f, -0.073f);
+     glVertex3f(0.355f, -0.20f, -0.073f);
+    glEnd();
+
 
 }
 
@@ -753,6 +841,41 @@ void hojasiz() {
     glVertex3f(0.1f, 0.15f, -0.078f);
 
     glEnd();
+    
+    
+    //chonga
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+
+    glVertex3f(0.33f, -0.265f, -0.077f);
+ 
+    glVertex3f(0.34f, -0.31f, -0.077f);
+   
+    glVertex3f(0.3f, -0.31f, -0.077f);
+
+    glVertex3f(0.29f, -0.29f, -0.077f);
+    
+    glVertex3f(0.3f, -0.26f, -0.077f);
+
+    glEnd();
+    
+      //chonga
+     glColor3f(1, 1, 1);
+    glBegin(GL_POLYGON);
+    //arriba derecha
+    glVertex3f(0.32f, -0.27f, -0.076f);
+    //punta derecha baj
+    glVertex3f(0.33f, -0.3f, -0.076f);
+   
+    glVertex3f(0.31f, -0.3f, -0.076f);
+
+    glVertex3f(0.30f, -0.29f, -0.076f);
+    //punta izquierda
+    glVertex3f(0.31f, -0.27f, -0.076f);
+
+    glEnd();
+    
+    
 }
 
 void hojasder() {
@@ -909,9 +1032,75 @@ void hojasder() {
 
 
     glEnd();
+    
+        //chonga derecha
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+
+    glVertex3f(0.35f, -0.265f, -0.077f);
+    //punta izquierda
+    glVertex3f(0.34f, -0.31f, -0.077f);
+   
+    glVertex3f(0.38f, -0.31f, -0.077f);
+
+    glVertex3f(0.39f, -0.29f, -0.077f);
+    
+    glVertex3f(0.38f, -0.26f, -0.077f);
+
+    glEnd();
+    
+      //chonga
+     glColor3f(1, 1, 1);
+    glBegin(GL_POLYGON);
+    //arriba derecha
+    glVertex3f(0.36f, -0.27f, -0.076f);
+    //punta derecha baj
+    glVertex3f(0.35f, -0.3f, -0.076f);
+   
+    glVertex3f(0.37f, -0.3f, -0.076f);
+
+    glVertex3f(0.38f, -0.29f, -0.076f);
+    //punta izquierda
+    glVertex3f(0.37f, -0.27f, -0.076f);
+
+    glEnd();
+    
+      //chonga derecha
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.33f, -0.3f, -0.075f);
+    glVertex3f(0.33f, -0.32f, -0.075f);
+    glVertex3f(0.35f, -0.32f, -0.075f);
+    glVertex3f(0.35f, -0.3f, -0.075f);
+
+    glEnd();
+    
+    //izquierda
+    //chonga 
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.33f, -0.31f, -0.075f);
+    glVertex3f(0.33f, -0.32f, -0.075f);    
+     glVertex3f(0.32f, -0.35f, -0.075f);
+     glVertex3f(0.31f, -0.32f, -0.075f);
+    glVertex3f(0.3f, -0.35f, -0.075f);
+    glEnd();
+    
+    //chonga 
+     glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex3f(0.35f, -0.31f, -0.075f);
+    glVertex3f(0.35f, -0.32f, -0.075f);    
+     glVertex3f(0.36f, -0.35f, -0.075f);
+     glVertex3f(0.37f, -0.32f, -0.075f);
+    glVertex3f(0.38f, -0.35f, -0.075f);
+   
+
+    glEnd();
 }
 
 void inicializar_bandera3d(void){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpia los búferes de color y profundidad
      glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Establece el color de fondo (negro)
      glEnable(GL_DEPTH_TEST); // Habilita el test de profundidad para el efecto 3D
 }
